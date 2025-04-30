@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"demo/model"
+	"demo/internal/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"

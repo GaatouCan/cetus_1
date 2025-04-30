@@ -1,7 +1,7 @@
 package main
 
 import (
-	"demo/handler"
+	"demo/internal/handler"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 	"log"

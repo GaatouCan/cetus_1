@@ -2,8 +2,7 @@ package main
 
 import (
 	"demo/configs"
-	"demo/internal/handler"
-	"demo/internal/model"
+	"demo/internal"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 	"gorm.io/driver/mysql"
@@ -28,30 +27,10 @@ func main() {
 	}
 
 	// 自动迁移表
-	if err := db.AutoMigrate(&model.User{}); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	}
+	internal.InitDatabaseTables(db)
 
 	router := gin.Default()
-
-	// Hello
-
-	helloHandler := handler.HelloHandler{}
-
-	router.GET("/hello", helloHandler.HelloWorld)
-	router.GET("/user", helloHandler.GetUser)
-	router.POST("/user", helloHandler.CreateUser)
-	router.PUT("/user", helloHandler.UpdateUser)
-	router.DELETE("/user", helloHandler.DeleteUser)
-
-	// GroceryItem
-
-	groceryItemHandler := handler.GroceryItemHandler{DB: db}
-
-	router.GET("/groceryItem", groceryItemHandler.GetGroceryItems)
-	router.POST("/groceryItem", groceryItemHandler.CreateGroceryItem)
-	router.PUT("/groceryItem", groceryItemHandler.UpdateGroceryItem)
-	router.DELETE("/groceryItem", groceryItemHandler.DeleteGroceryItem)
+	internal.RegisterRouter(router, db)
 
 	// 创建服务器
 	srv := &http.Server{

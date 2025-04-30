@@ -8,7 +8,7 @@ import (
 )
 
 var groceryItems = []model.GroceryItem{
-	{ID: "OP3keqGThTCqmkQoBbx", Name: "Banana", Quantity: 1, Category: "fruit"},
+	{ID: "OP3keqGThTCqmkQoBbx", Name: "Banana", Quantity: 1, Category: "Fruit"},
 }
 
 type GroceryItemHandler struct {

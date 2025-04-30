@@ -18,6 +18,8 @@ func main() {
 
 	router := gin.Default()
 
+	// Hello
+
 	helloHandler := handler.HelloHandler{}
 
 	router.GET("/hello", helloHandler.HelloWorld)
@@ -25,6 +27,13 @@ func main() {
 	router.POST("/user", helloHandler.CreateUser)
 	router.PUT("/user", helloHandler.UpdateUser)
 	router.DELETE("/user", helloHandler.DeleteUser)
+
+	// GroceryItem
+
+	groceryItemHandler := handler.GroceryItemHandler{}
+
+	router.GET("/groceryItem", groceryItemHandler.GetGroceryItems)
+	router.POST("/groceryItem", groceryItemHandler.CreateGroceryItem)
 
 	// 创建服务器
 	srv := &http.Server{

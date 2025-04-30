@@ -9,6 +9,8 @@ import (
 
 var groceryItems = []model.GroceryItem{
 	{ID: "OP3keqGThTCqmkQoBbx", Name: "Banana", Quantity: 1, Category: "Fruit"},
+	{ID: "OP3keqGfwesdgq", Name: "Milk", Quantity: 1, Category: "Dairy"},
+	{ID: "dfaewgwedsew", Name: "Beef Steak", Quantity: 5, Category: "Meat"},
 }
 
 type GroceryItemHandler struct {

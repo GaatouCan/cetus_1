@@ -4,6 +4,7 @@ import (
 	"demo/internal/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -14,6 +15,7 @@ var groceryItems = []model.GroceryItem{
 }
 
 type GroceryItemHandler struct {
+	DB *gorm.DB
 }
 
 func (h *GroceryItemHandler) GetGroceryItems(c *gin.Context) {

@@ -1,9 +1,13 @@
 package main
 
 import (
+	"demo/configs"
 	"demo/internal/handler"
+	"demo/internal/model"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os/signal"
@@ -15,6 +19,18 @@ func main() {
 	// 创建 OS 信号通道 监听 Ctrl+C 或 kill 信号
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
+
+	cfg := configs.LoadConfig()
+
+	db, err := gorm.Open(mysql.Open(cfg.DSN()), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+
+	// 自动迁移表
+	if err := db.AutoMigrate(&model.User{}); err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	}
 
 	router := gin.Default()
 
@@ -30,7 +46,7 @@ func main() {
 
 	// GroceryItem
 
-	groceryItemHandler := handler.GroceryItemHandler{}
+	groceryItemHandler := handler.GroceryItemHandler{DB: db}
 
 	router.GET("/groceryItem", groceryItemHandler.GetGroceryItems)
 	router.POST("/groceryItem", groceryItemHandler.CreateGroceryItem)

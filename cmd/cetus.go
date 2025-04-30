@@ -34,6 +34,8 @@ func main() {
 
 	router.GET("/groceryItem", groceryItemHandler.GetGroceryItems)
 	router.POST("/groceryItem", groceryItemHandler.CreateGroceryItem)
+	router.PUT("/groceryItem", groceryItemHandler.UpdateGroceryItem)
+	router.DELETE("/groceryItem", groceryItemHandler.DeleteGroceryItem)
 
 	// 创建服务器
 	srv := &http.Server{

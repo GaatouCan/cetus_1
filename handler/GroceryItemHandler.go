@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"demo/internal/model"
+	"demo/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"

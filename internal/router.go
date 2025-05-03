@@ -1,14 +1,14 @@
-package router
+package internal
 
 import (
-	"demo/handler"
+	handler2 "demo/internal/handler"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	// Hello
-	helloHandler := handler.HelloHandler{}
+	helloHandler := handler2.HelloHandler{}
 
 	router.GET("/hello", helloHandler.HelloWorld)
 
@@ -21,7 +21,7 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	}
 
 	// GroceryItem
-	groceryItemHandler := handler.GroceryItemHandler{DB: db}
+	groceryItemHandler := handler2.GroceryItemHandler{DB: db}
 
 	groceryGroup := router.Group("/groceryItem")
 	{

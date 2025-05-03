@@ -2,8 +2,7 @@ package main
 
 import (
 	"demo/configs"
-	"demo/database"
-	"demo/router"
+	"demo/internal"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 	"gorm.io/driver/mysql"
@@ -28,10 +27,10 @@ func main() {
 	}
 
 	// 自动迁移表
-	database.InitDatabaseTables(db)
+	internal.InitDatabaseTables(db)
 
 	r := gin.Default()
-	router.RegisterRouter(r, db)
+	internal.RegisterRouter(r, db)
 
 	// 创建服务器
 	srv := &http.Server{

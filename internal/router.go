@@ -8,26 +8,27 @@ import (
 
 func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	// Hello
-	helloHandler := handler2.HelloHandler{}
-
-	router.GET("/hello", helloHandler.HelloWorld)
-
 	userGroup := router.Group("/user")
 	{
-		userGroup.GET("/", helloHandler.GetUser)
-		userGroup.POST("/", helloHandler.CreateUser)
-		userGroup.PUT("/", helloHandler.UpdateUser)
-		userGroup.DELETE("/", helloHandler.DeleteUser)
+		handler := handler2.HelloHandler{}
+
+		router.GET("/hello", handler.HelloWorld)
+
+		userGroup.GET("/", handler.GetUser)
+		userGroup.POST("/", handler.CreateUser)
+		userGroup.PUT("/", handler.UpdateUser)
+		userGroup.DELETE("/", handler.DeleteUser)
 	}
 
 	// GroceryItem
-	groceryItemHandler := handler2.GroceryItemHandler{DB: db}
-
 	groceryGroup := router.Group("/groceryItem")
+
 	{
-		groceryGroup.GET("/", groceryItemHandler.GetGroceryItems)
-		groceryGroup.POST("/", groceryItemHandler.CreateGroceryItem)
-		groceryGroup.PUT("/", groceryItemHandler.UpdateGroceryItem)
-		groceryGroup.DELETE("/", groceryItemHandler.DeleteGroceryItem)
+		handler := handler2.GroceryItemHandler{DB: db}
+
+		groceryGroup.GET("/", handler.GetGroceryItems)
+		groceryGroup.POST("/", handler.CreateGroceryItem)
+		groceryGroup.PUT("/", handler.UpdateGroceryItem)
+		groceryGroup.DELETE("/", handler.DeleteGroceryItem)
 	}
 }

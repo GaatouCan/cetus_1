@@ -29,13 +29,13 @@ func main() {
 	// 自动迁移表
 	internal.InitDatabaseTables(db)
 
-	r := gin.Default()
-	internal.RegisterRouter(r, db)
+	router := gin.Default()
+	internal.RegisterRouter(router, db)
 
 	// 创建服务器
 	srv := &http.Server{
 		Addr:    ":8080",
-		Handler: r,
+		Handler: router,
 	}
 
 	// 启动服务在 goroutine 中以便监听 OS 信号

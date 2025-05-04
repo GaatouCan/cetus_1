@@ -1,7 +1,7 @@
 package internal
 
 import (
-	handler2 "demo/internal/handler"
+	"demo/internal/handler"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -10,25 +10,25 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	// Hello
 	userGroup := router.Group("/user")
 	{
-		handler := handler2.HelloHandler{}
+		h := handler.HelloHandler{}
 
-		router.GET("/hello", handler.HelloWorld)
+		router.GET("/hello", h.HelloWorld)
 
-		userGroup.GET("/", handler.GetUser)
-		userGroup.POST("/", handler.CreateUser)
-		userGroup.PUT("/", handler.UpdateUser)
-		userGroup.DELETE("/", handler.DeleteUser)
+		userGroup.GET("/", h.GetUser)
+		userGroup.POST("/", h.CreateUser)
+		userGroup.PUT("/", h.UpdateUser)
+		userGroup.DELETE("/", h.DeleteUser)
 	}
 
 	// GroceryItem
 	groceryGroup := router.Group("/groceryItem")
 
 	{
-		handler := handler2.GroceryItemHandler{DB: db}
+		h := handler.GroceryItemHandler{DB: db}
 
-		groceryGroup.GET("/", handler.GetGroceryItems)
-		groceryGroup.POST("/", handler.CreateGroceryItem)
-		groceryGroup.PUT("/", handler.UpdateGroceryItem)
-		groceryGroup.DELETE("/", handler.DeleteGroceryItem)
+		groceryGroup.GET("/", h.GetGroceryItems)
+		groceryGroup.POST("/", h.CreateGroceryItem)
+		groceryGroup.PUT("/", h.UpdateGroceryItem)
+		groceryGroup.DELETE("/", h.DeleteGroceryItem)
 	}
 }

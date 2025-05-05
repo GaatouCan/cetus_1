@@ -70,7 +70,7 @@ func (h *GroceryItemHandler) DeleteGroceryItem(c *gin.Context) {
 	var groceryItem model.GroceryItem
 
 	if err := h.DB.Where("id = ?", id).First(&groceryItem).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Database not found"})
 		return
 	}
 

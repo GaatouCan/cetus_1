@@ -14,10 +14,10 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 
 		router.GET("/hello", h.HelloWorld)
 
-		userGroup.GET("/", h.GetUser)
-		userGroup.POST("/", h.CreateUser)
-		userGroup.PUT("/", h.UpdateUser)
-		userGroup.DELETE("/", h.DeleteUser)
+		userGroup.GET("", h.GetUser)
+		userGroup.POST("", h.CreateUser)
+		userGroup.PUT("", h.UpdateUser)
+		userGroup.DELETE("", h.DeleteUser)
 	}
 
 	// GroceryItem
@@ -26,9 +26,9 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	{
 		h := handler.GroceryItemHandler{DB: db}
 
-		groceryGroup.GET("/", h.GetGroceryItems)
-		groceryGroup.POST("/", h.CreateGroceryItem)
-		groceryGroup.PUT("/", h.UpdateGroceryItem)
-		groceryGroup.DELETE("/", h.DeleteGroceryItem)
+		groceryGroup.GET("", h.GetGroceryItems)
+		groceryGroup.POST("", h.CreateGroceryItem)
+		groceryGroup.PUT("", h.UpdateGroceryItem)
+		groceryGroup.DELETE("", h.DeleteGroceryItem)
 	}
 }

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"demo/internal/auth"
 	"demo/internal/handler"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -18,9 +19,13 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 	{
 		h := handler.UserHandler{DB: db}
 
+		router.POST("/login", h.UserLogin)
+		router.POST("/register", h.CreateUser)
+
+		userGroup.Use(auth.TokenMiddleware())
+
 		userGroup.GET("/page/:page", h.GetAllUsers)
-		userGroup.GET("/:id", h.GetUser)
-		userGroup.POST("", h.CreateUser)
+		userGroup.GET("", h.GetUserInfo)
 		userGroup.PUT("", h.UpdateUser)
 		userGroup.DELETE("/:id", h.DeleteUser)
 	}

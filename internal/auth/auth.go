@@ -9,7 +9,7 @@ import (
 
 var JWTKey = []byte("your_secret_key")
 
-func AuthMiddleware() gin.HandlerFunc {
+func TokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {

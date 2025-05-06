@@ -38,13 +38,15 @@ func (h *UserHandler) GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func (h *UserHandler) GetUser(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-		return
-	}
+func (h *UserHandler) GetUserInfo(c *gin.Context) {
+	//idStr := c.Param("id")
+	//id, err := strconv.Atoi(idStr)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+	//	return
+	//}
+
+	id := int(c.MustGet("id").(float64))
 
 	var user model.User
 	if err := h.DB.First(&user, id).Error; err != nil {
@@ -128,7 +130,7 @@ func (h *UserHandler) UserLogin(c *gin.Context) {
 	}
 
 	var user model.User
-	if err := h.DB.First(&user, req.Email).Error; err != nil {
+	if err := h.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}

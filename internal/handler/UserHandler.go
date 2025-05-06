@@ -1,12 +1,15 @@
 package handler
 
 import (
+	"demo/internal"
 	"demo/internal/model"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type UserHandler struct {
@@ -115,4 +118,36 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+func (h *UserHandler) UserLogin(c *gin.Context) {
+	var req model.LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	var user model.User
+	if err := h.DB.First(&user, req.Email).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if req.Password != user.Password {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "wrong password"})
+		return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": user.Username,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenStr, err := token.SignedString(internal.JwtKey)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": tokenStr})
 }

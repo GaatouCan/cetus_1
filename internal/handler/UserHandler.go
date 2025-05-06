@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"demo/internal"
+	"demo/internal/auth"
 	"demo/internal/model"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -143,7 +143,7 @@ func (h *UserHandler) UserLogin(c *gin.Context) {
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	tokenStr, err := token.SignedString(internal.JwtKey)
+	tokenStr, err := token.SignedString(auth.JWTKey)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return

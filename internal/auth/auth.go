@@ -1,4 +1,4 @@
-package internal
+package auth
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var JwtKey = []byte("your_secret_key")
+var JWTKey = []byte("your_secret_key")
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -20,7 +20,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return JwtKey, nil
+			return JWTKey, nil
 		})
 
 		if err != nil || !token.Valid {

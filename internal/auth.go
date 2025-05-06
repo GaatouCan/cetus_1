@@ -1,4 +1,4 @@
-package auth
+package internal
 
 import (
 	"demo/configs"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func TokenMiddleware() gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {

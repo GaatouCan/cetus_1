@@ -2,6 +2,7 @@ package handler
 
 import (
 	"demo/internal/model"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -22,47 +23,49 @@ func (h *GroceryItemHandler) GetGroceryItems(c *gin.Context) {
 }
 
 func (h *GroceryItemHandler) CreateGroceryItem(c *gin.Context) {
-	var groceryItem model.GroceryItem
-	if err := c.ShouldBindJSON(&groceryItem); err != nil {
+	var item model.GroceryItem
+	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := h.DB.Create(&groceryItem).Error; err != nil {
+	if err := h.DB.Create(&item).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, groceryItem)
+	c.JSON(http.StatusCreated, item)
 }
 
 func (h *GroceryItemHandler) UpdateGroceryItem(c *gin.Context) {
-	id := c.Param("id")
+	var item model.GroceryItem
 
-	var oldGroceryItem model.GroceryItem
-
-	var groceryItem model.GroceryItem
-	if err := c.ShouldBindJSON(&groceryItem); err != nil {
+	if err := c.ShouldBindJSON(&item); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if groceryItem.ID != id {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "id<UNK>"})
-		return
-	}
+	var oldItem model.GroceryItem
+	err := h.DB.Where("id = ?", item.ID).First(&oldItem).Error
 
-	if err := h.DB.Where("id = ?", id).First(&oldGroceryItem).Error; err != nil {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = h.DB.Create(&item).Error
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			return
+		}
+	} else if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
+	} else {
+		err = h.DB.Updates(&item).Error
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			return
+		}
 	}
 
-	if err := h.DB.Updates(&groceryItem).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, groceryItem)
+	c.JSON(http.StatusOK, item)
 }
 
 func (h *GroceryItemHandler) DeleteGroceryItem(c *gin.Context) {

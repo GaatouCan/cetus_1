@@ -28,7 +28,7 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 
 		groceryGroup.GET("", h.GetGroceryItems)
 		groceryGroup.POST("", h.CreateGroceryItem)
-		groceryGroup.PUT("/:id", h.UpdateGroceryItem)
+		groceryGroup.PUT("", h.UpdateGroceryItem)
 		groceryGroup.DELETE("/:id", h.DeleteGroceryItem)
 	}
 }

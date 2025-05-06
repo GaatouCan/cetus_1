@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-var JWTKey = []byte("your_secret_key")
+var JWTKey = []byte("64da497e5e8ae4b16de3d9a6782993b728115cd621606ed74ff995e92f9e7994")
 
 func TokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "No auth header"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "There is no Authorization field in the header"})
 			return
 		}
 
@@ -24,7 +24,7 @@ func TokenMiddleware() gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "无效Token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unavailable Token"})
 			return
 		}
 

@@ -39,13 +39,6 @@ func (h *UserHandler) GetAllUsers(c *gin.Context) {
 }
 
 func (h *UserHandler) GetUserInfo(c *gin.Context) {
-	//idStr := c.Param("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-	//	return
-	//}
-
 	id := int(c.MustGet("id").(float64))
 
 	var user model.User
@@ -73,14 +66,22 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 }
 
 func (h *UserHandler) UpdateUser(c *gin.Context) {
+	id := int(c.MustGet("id").(float64))
+
 	var user model.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
+	if user.ID != id {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "The user ID being modified is inconsistent"})
+		return
+	}
+
 	var oldUser model.User
 	err := h.DB.First(&oldUser, user.ID).Error
+
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = h.DB.Create(&user).Error
 		if err != nil {
@@ -136,7 +137,7 @@ func (h *UserHandler) UserLogin(c *gin.Context) {
 	}
 
 	if req.Password != user.Password {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "wrong password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Wrong password"})
 		return
 	}
 

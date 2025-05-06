@@ -7,14 +7,19 @@ import (
 )
 
 func RegisterRouter(router *gin.Engine, db *gorm.DB) {
-	// Hello
-	userGroup := router.Group("/user")
 	{
 		h := handler.HelloHandler{}
 
 		router.GET("/hello", h.HelloWorld)
+	}
 
-		userGroup.GET("", h.GetUser)
+	// User
+	userGroup := router.Group("/user")
+	{
+		h := handler.UserHandler{DB: db}
+
+		userGroup.GET("/page/:page", h.GetAllUsers)
+		userGroup.GET("/:id", h.GetUser)
 		userGroup.POST("", h.CreateUser)
 		userGroup.PUT("", h.UpdateUser)
 		userGroup.DELETE("/:id", h.DeleteUser)

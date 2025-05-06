@@ -1,13 +1,12 @@
 package auth
 
 import (
+	"demo/configs"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"strings"
 )
-
-var JWTKey = []byte("64da497e5e8ae4b16de3d9a6782993b728115cd621606ed74ff995e92f9e7994")
 
 func TokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -20,7 +19,7 @@ func TokenMiddleware() gin.HandlerFunc {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return JWTKey, nil
+			return configs.GetConfig().JWTToken, nil
 		})
 
 		if err != nil || !token.Valid {

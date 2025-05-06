@@ -17,7 +17,7 @@ func RegisterRouter(router *gin.Engine, db *gorm.DB) {
 		userGroup.GET("", h.GetUser)
 		userGroup.POST("", h.CreateUser)
 		userGroup.PUT("", h.UpdateUser)
-		userGroup.DELETE("", h.DeleteUser)
+		userGroup.DELETE("/:id", h.DeleteUser)
 	}
 
 	// GroceryItem

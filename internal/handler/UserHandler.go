@@ -146,7 +146,7 @@ func (h *UserHandler) UserLogin(c *gin.Context) {
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	tokenStr, err := token.SignedString(configs.GetConfig().JWTToken)
+	tokenStr, err := token.SignedString([]byte(configs.GetConfig().Security.JWTToken))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return

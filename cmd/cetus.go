@@ -3,6 +3,7 @@ package main
 import (
 	"demo/configs"
 	"demo/internal"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 	"gorm.io/driver/mysql"
@@ -32,9 +33,11 @@ func main() {
 	r := gin.Default()
 	internal.RegisterRouter(r, db)
 
+	addr := fmt.Sprintf(":%d", cfg.Server.Port)
+
 	// 创建服务器
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    addr,
 		Handler: r,
 	}
 
@@ -48,7 +51,7 @@ func main() {
 	// 等待中断信号触发
 	<-ctx.Done()
 	stop()
-	log.Print("shutting down server")
+	log.Print("Shutting down server")
 
 	// 创建一个 5 秒超时的 context, 用于 graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

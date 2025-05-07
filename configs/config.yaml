@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+database:
+  host: localhost
+  port: 3306
+  username: root
+  password: 12345678
+  name: cetus
+
+security:
+  jwt_token: 64da497e5e8ae4b16de3d9a6782993b728115cd621606ed74ff995e92f9e7994

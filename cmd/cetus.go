@@ -3,6 +3,7 @@ package main
 import (
 	"demo/configs"
 	"demo/internal"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
@@ -43,7 +44,7 @@ func main() {
 
 	// 启动服务在 goroutine 中以便监听 OS 信号
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
